@@ -17,7 +17,15 @@ services:
         until mongosh --eval 'db.runCommand({ping:1})' >/dev/null 2>&1; do
           sleep 2;
         done;
-        mongorestore /dump;
+        
+        # Check if database is empty before restoring
+        if ! mongosh --quiet --eval 'db.getCollectionNames().length' stockDatabase | grep -q '^0$'; then
+          echo 'Database already contains data - skipping restore'
+        else
+          echo 'Database is empty - performing restore'
+          mongorestore /dump
+        fi
+        
         wait
       "
 
