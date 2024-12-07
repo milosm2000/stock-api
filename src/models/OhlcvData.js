@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const ohlcvDataSchema = new mongoose.Schema(
   {
-    tickerSymbol: {
+    ticker: {
       type: String,
       required: true,
       trim: true,
@@ -32,7 +32,7 @@ const ohlcvDataSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    adjClose: {
+    adj_close: {
       type: Number,
       required: true,
       min: 0,
@@ -48,8 +48,21 @@ const ohlcvDataSchema = new mongoose.Schema(
 
 // Compound indexi, TODO: proveriti ponovo koji su potrebni nakon implementiranja endpointa
 
-ohlcvDataSchema.index({ tickerSymbol: 1, date: 1 });
+ohlcvDataSchema.index({ ticker: 1, date: 1 });
 
-const OhlcvData = mongoose.model("OhlcvData", ohlcvDataSchema);
+const OhlcvData = mongoose.model("OhlcvData", ohlcvDataSchema, "ohlcv_data");
 
 export default OhlcvData;
+
+// db.ohlcv_data.updateMany({}, [
+//   {
+//     $set: {
+//       open: { $toDouble: "$open" },
+//       high: { $toDouble: "$high" },
+//       low: { $toDouble: "$low" },
+//       close: { $toDouble: "$close" },
+//       adj_close: { $toDouble: "$adj_close" },
+//       volume: { $toDouble: "$volume" },
+//     },
+//   },
+// ]);

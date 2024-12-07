@@ -1,0 +1,35 @@
+version: "3.8"
+services:
+  mongodb:
+    container_name: database_stock_api_test
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+      - ./dump:/dump
+    environment:
+      MONGO_INITDB_DATABASE: stockDatabase
+    command: >
+      bash -c "
+        docker-entrypoint.sh mongod &
+        until mongosh --eval 'db.runCommand({ping:1})' >/dev/null 2>&1; do
+          sleep 2;
+        done;
+        mongorestore /dump;
+        wait
+      "
+
+  app:
+    build: .
+    ports:
+      - 4000:3000
+    environment:
+      PORT: 3000
+      DB_URI: mongodb://mongodb:27017/stockDatabase
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb: {}

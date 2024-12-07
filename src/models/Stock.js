@@ -7,7 +7,7 @@ const stockSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    tickerSymbol: {
+    ticker: {
       type: String,
       required: true,
       unique: true,
@@ -24,7 +24,7 @@ const stockSchema = new mongoose.Schema(
   }
 );
 
-stockSchema.index({ tickerSymbol: 1 });
+stockSchema.index({ ticker: 1 });
 
 const Stock = mongoose.model("Stock", stockSchema);
 
