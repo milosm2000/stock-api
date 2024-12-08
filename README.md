@@ -46,7 +46,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
 - **Usage Example**:
   - **Request**:
     ```bash
-    curl -X POST http://localhost:3000/stocks \
+    curl -X POST http://localhost:4000/stocks \
     -H "Content-Type: application/json" \
     -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04T00:00:00.000Z"}'
     ```
@@ -100,7 +100,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
 - **Usage Example**:
   - **Request**:
     ```bash
-    curl -X GET http://localhost:3000/stocks/AAPL
+    curl -X GET http://localhost:4000/stocks/AAPL
     ```
   - **Response**:
     ```json
@@ -161,7 +161,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
 - **Usage Example**:
   - **Request**:
     ```bash
-    curl -X PUT http://localhost:3000/stocks/AAPL \
+    curl -X PUT http://localhost:4000/stocks/AAPL \
     -H "Content-Type: application/json" \
     -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01T00:00:00.000Z"}'
     ```
@@ -210,7 +210,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
 - **Usage Example**:
   - **Request**:
     ```bash
-    curl -X DELETE http://localhost:3000/stocks/AAPL
+    curl -X DELETE http://localhost:4000/stocks/AAPL
     ```
   - **Response**:
     ```json
@@ -248,7 +248,7 @@ To interact with the API, you can use the following cURL commands.
 - **Create Stock**:
 
   ```bash
-  curl -X POST http://localhost:3000/stocks \
+  curl -X POST http://localhost:4000/stocks \
   -H "Content-Type: application/json" \
   -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04T00:00:00.000Z"}'
   ```
@@ -256,20 +256,20 @@ To interact with the API, you can use the following cURL commands.
 - **Get Stock by Ticker**:
 
   ```bash
-  curl -X GET http://localhost:3000/stocks/AAPL
+  curl -X GET http://localhost:4000/stocks/AAPL
   ```
 
 - **Update Stock**:
 
   ```bash
-  curl -X PUT http://localhost:3000/stocks/AAPL \
+  curl -X PUT http://localhost:4000/stocks/AAPL \
   -H "Content-Type: application/json" \
   -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01T00:00:00.000Z"}'
   ```
 
 - **Delete Stock**:
   ```bash
-  curl -X DELETE http://localhost:3000/stocks/AAPL
+  curl -X DELETE http://localhost:4000/stocks/AAPL
   ```
 
 ---
