@@ -13,7 +13,7 @@ services:
       MONGO_INITDB_DATABASE: stockDatabase
     command: >
       bash -c "
-        docker-entrypoint.sh mongod &
+        docker-entrypoint.sh mongod --quiet --logpath /data/db/mongodb.log &
         until mongosh --eval 'db.runCommand({ping:1})' >/dev/null 2>&1; do
           sleep 2;
         done;
@@ -41,3 +41,5 @@ services:
 
 volumes:
   mongodb: {}
+  mongodb-logs:
+    driver: local
