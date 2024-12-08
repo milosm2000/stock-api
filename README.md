@@ -284,6 +284,8 @@ Each API endpoint will return appropriate error responses, including status code
 
 # OHLCV data api
 
+Analyzes the profit potential of a stock within a specified date range and compares it to the previous and next periods of the same length, as well as to other stocks.
+
 ## API Endpoints
 
 ### 5. **Analyze Profit Potential**
@@ -444,7 +446,3 @@ Each API endpoint will return appropriate error responses, including status code
       ]
     }
     ```
-
-  ```
-
-  ```
