@@ -18,12 +18,12 @@ services:
           sleep 2;
         done;
         
-        # Check if database is empty before restoring
-        if ! mongosh --quiet --eval 'db.getCollectionNames().length' stockDatabase | grep -q '^0$'; then
-          echo 'Database already contains data - skipping restore'
-        else
-          echo 'Database is empty - performing restore'
+        # Check if ohlcv_data collection exists and has documents
+        if mongosh --quiet --eval 'db.ohlcv_data.countDocuments()' stockDatabase | grep -q '^0$'; then
+          echo 'The ohlcv_data collection is empty - performing restore'
           mongorestore /dump
+        else
+          echo 'The ohlcv_data collection already contains data - skipping restore'
         fi
         
         wait

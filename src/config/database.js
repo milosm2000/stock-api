@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import OhlcvData from "../models/OhlcvData.js";
+import Stock from "../models/Stock.js";
 
 export const connectDB = async () => {
   try {
@@ -7,7 +9,17 @@ export const connectDB = async () => {
       maxPoolSize: 10,
     });
 
-    mongoose.connection.on("connected", () => console.log("MongoDB connected"));
+    mongoose.connection.on("connected", async () => {
+      console.log("MongoDB connected");
+
+      try {
+        await OhlcvData.createIndexes();
+        await Stock.createIndexes();
+        console.log("Indexes created successfully");
+      } catch (err) {
+        console.error("Error creating indexes:", err);
+      }
+    });
     mongoose.connection.on("error", (err) =>
       console.error("MongoDB error:", err)
     );
