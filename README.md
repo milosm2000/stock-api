@@ -282,4 +282,156 @@ Each API endpoint will return appropriate error responses, including status code
 - Not found errors (`404 Not Found`)
 - Server errors (`500 Internal Server Error`)
 
----
+# OHLCV data api
+
+## API Endpoints
+
+### 5. **Analyze Profit Potential**
+
+- **Endpoint**: `GET api/ohlcv/:ticker/:startDate/:endDate`
+- **Description**: Analyzes the profit potential of a stock within a specified date range and compares it to the previous and next periods of the same length, as well as to other stocks.
+- **Path Parameters**:
+
+  - `ticker`: The stock's ticker symbol (e.g., `AAPL` for Apple).
+  - `startDate`: The start date of the period to analyze (ISO 8601 format, e.g., `2020-01-01`).
+  - `endDate`: The end date of the period to analyze (ISO 8601 format, e.g., `2020-01-07`).
+
+- **Response**:
+
+  - **Status Code**: `200 OK`
+  - **Body**:
+    ```json
+    {
+      "previousPeriod": {
+        "period": {
+          "startDate": "2019-12-24",
+          "endDate": "2019-12-30",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2019-12-24",
+          "buyPrice": 100,
+          "sellDate": "2019-12-30",
+          "sellPrice": 110,
+          "profit": 10
+        },
+        "maxMultipleTradesProfit": 15
+      },
+      "currentPeriod": {
+        "period": {
+          "startDate": "2020-01-01",
+          "endDate": "2020-01-07",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2020-01-01",
+          "buyPrice": 105,
+          "sellDate": "2020-01-07",
+          "sellPrice": 120,
+          "profit": 15
+        },
+        "maxMultipleTradesProfit": 20
+      },
+      "nextPeriod": {
+        "period": {
+          "startDate": "2020-01-08",
+          "endDate": "2020-01-14",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2020-01-08",
+          "buyPrice": 115,
+          "sellDate": "2020-01-14",
+          "sellPrice": 125,
+          "profit": 10
+        },
+        "maxMultipleTradesProfit": 12
+      },
+      "betterPerformingStocks": [
+        {
+          "ticker": "MSFT",
+          "profit": 25
+        },
+        {
+          "ticker": "GOOG",
+          "profit": 22
+        }
+      ]
+    }
+    ```
+
+- **Error Response**:
+
+  - **Status Code**: `400 Bad Request`
+  - **Body**:
+    ```json
+    {
+      "message": "No data available for the specified period"
+    }
+    ```
+
+- **Usage Example**:
+  - **Request**:
+    ```bash
+    curl -X GET http://localhost:4000/api/ohlcv/AAPL/2020-01-01/2020-01-07
+    ```
+  - **Response**:
+    ```json
+    {
+      "previousPeriod": {
+        "period": {
+          "startDate": "2019-12-24",
+          "endDate": "2019-12-30",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2019-12-24",
+          "buyPrice": 100,
+          "sellDate": "2019-12-30",
+          "sellPrice": 110,
+          "profit": 10
+        },
+        "maxMultipleTradesProfit": 15
+      },
+      "currentPeriod": {
+        "period": {
+          "startDate": "2020-01-01",
+          "endDate": "2020-01-07",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2020-01-01",
+          "buyPrice": 105,
+          "sellDate": "2020-01-07",
+          "sellPrice": 120,
+          "profit": 15
+        },
+        "maxMultipleTradesProfit": 20
+      },
+      "nextPeriod": {
+        "period": {
+          "startDate": "2020-01-08",
+          "endDate": "2020-01-14",
+          "workingDays": 5
+        },
+        "bestSingleTrade": {
+          "buyDate": "2020-01-08",
+          "buyPrice": 115,
+          "sellDate": "2020-01-14",
+          "sellPrice": 125,
+          "profit": 10
+        },
+        "maxMultipleTradesProfit": 12
+      },
+      "betterPerformingStocks": [
+        {
+          "ticker": "MSFT",
+          "profit": 25
+        },
+        {
+          "ticker": "GOOG",
+          "profit": 22
+        }
+      ]
+    }
+    ```
