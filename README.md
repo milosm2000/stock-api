@@ -371,6 +371,7 @@ Each API endpoint will return appropriate error responses, including status code
     ```
 
 - **Usage Example**:
+
   - **Request**:
     ```bash
     curl -X GET http://localhost:4000/api/ohlcv/AAPL/2020-01-01/2020-01-07
@@ -380,58 +381,70 @@ Each API endpoint will return appropriate error responses, including status code
     {
       "previousPeriod": {
         "period": {
-          "startDate": "2019-12-24",
-          "endDate": "2019-12-30",
-          "workingDays": 5
+          "startDate": "2019-12-26T00:00:00.000Z",
+          "endDate": "2019-12-31T00:00:00.000Z",
+          "workingDays": 4
         },
         "bestSingleTrade": {
-          "buyDate": "2019-12-24",
-          "buyPrice": 100,
-          "sellDate": "2019-12-30",
-          "sellPrice": 110,
-          "profit": 10
+          "buyDate": "2019-12-27T00:00:00.000Z",
+          "buyPrice": 72.449997,
+          "sellDate": "2019-12-31T00:00:00.000Z",
+          "sellPrice": 73.412498,
+          "profit": 0.9625010000000032
         },
-        "maxMultipleTradesProfit": 15
+        "maxMultipleTradesProfit": 0.9625010000000032
       },
       "currentPeriod": {
         "period": {
-          "startDate": "2020-01-01",
-          "endDate": "2020-01-07",
-          "workingDays": 5
+          "startDate": "2020-01-01T00:00:00.000Z",
+          "endDate": "2020-01-07T00:00:00.000Z",
+          "workingDays": 4
         },
         "bestSingleTrade": {
-          "buyDate": "2020-01-01",
-          "buyPrice": 105,
-          "sellDate": "2020-01-07",
-          "sellPrice": 120,
-          "profit": 15
+          "buyDate": "2020-01-03T00:00:00.000Z",
+          "buyPrice": 74.357498,
+          "sellDate": "2020-01-06T00:00:00.000Z",
+          "sellPrice": 74.949997,
+          "profit": 0.5924989999999895
         },
-        "maxMultipleTradesProfit": 20
+        "maxMultipleTradesProfit": 0.5924989999999895
       },
       "nextPeriod": {
         "period": {
-          "startDate": "2020-01-08",
-          "endDate": "2020-01-14",
-          "workingDays": 5
+          "startDate": "2020-01-08T00:00:00.000Z",
+          "endDate": "2020-01-13T00:00:00.000Z",
+          "workingDays": 4
         },
         "bestSingleTrade": {
-          "buyDate": "2020-01-08",
-          "buyPrice": 115,
-          "sellDate": "2020-01-14",
-          "sellPrice": 125,
-          "profit": 10
+          "buyDate": "2020-01-08T00:00:00.000Z",
+          "buyPrice": 75.797501,
+          "sellDate": "2020-01-13T00:00:00.000Z",
+          "sellPrice": 79.239998,
+          "profit": 3.442497000000003
         },
-        "maxMultipleTradesProfit": 12
+        "maxMultipleTradesProfit": 3.442497000000003
       },
       "betterPerformingStocks": [
         {
-          "ticker": "MSFT",
-          "profit": 25
+          "ticker": "GOOG",
+          "profit": 36.29003899999998
         },
         {
-          "ticker": "GOOG",
-          "profit": 22
+          "ticker": "AMZN",
+          "profit": 31.890014000000065
+        },
+        {
+          "ticker": "NFLX",
+          "profit": 9.929993000000024
+        },
+        {
+          "ticker": "META",
+          "profit": 4.390000000000015
         }
       ]
     }
     ```
+
+  ```
+
+  ```
