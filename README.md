@@ -1,6 +1,20 @@
+# Instructions:
+clone the repo, ```bash docker compose up --build ``` will start express app service and a mongo service, OHLCV data will be automatically restored from the ./dump 
+during mongo service runtime at the startup. For simplicity app service binds to localhost:4000, connects to a database service running on mongodb://localhost:27017, all by default
+
+4 endpoints on http://localhost:4000/api/stocks 
+1 on http://localhost:4000/api/ohlcv
+
+run tests localy with:
+npm install
+npm run test
+
+or inside app docker container,
+
 # Stock CRUD api
 
 This is a RESTful API to manage stocks, providing CRUD operations for stock data, such as creating, reading, updating, and deleting stock entries.
+And of README includes OHLCV data api.
 
 ## API Endpoints
 
