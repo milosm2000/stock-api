@@ -14,7 +14,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
   {
     "companyName": "Facebook",
     "ticker": "META",
-    "foundingDate": "2004-02-04T00:00:00.000Z"
+    "foundingDate": "2004-02-04"
   }
   ```
 
@@ -27,7 +27,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Facebook",
       "ticker": "META",
-      "foundingDate": "2004-02-04T00:00:00.000Z",
+      "foundingDate": "2004-02-04",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -48,7 +48,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
     ```bash
     curl -X POST http://localhost:4000/stocks \
     -H "Content-Type: application/json" \
-    -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04T00:00:00.000Z"}'
+    -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04"}'
     ```
   - **Response**:
     ```json
@@ -56,7 +56,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Facebook",
       "ticker": "META",
-      "foundingDate": "2004-02-04T00:00:00.000Z",
+      "foundingDate": "2004-02-04",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -81,7 +81,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Apple",
       "ticker": "AAPL",
-      "foundingDate": "1976-04-01T00:00:00.000Z",
+      "foundingDate": "1976-04-01",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -108,7 +108,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Apple",
       "ticker": "AAPL",
-      "foundingDate": "1976-04-01T00:00:00.000Z",
+      "foundingDate": "1976-04-01",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -129,7 +129,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
   ```json
   {
     "companyName": "Apple Inc.",
-    "foundingDate": "1976-04-01T00:00:00.000Z"
+    "foundingDate": "1976-04-01"
   }
   ```
 
@@ -142,7 +142,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Apple Inc.",
       "ticker": "AAPL",
-      "foundingDate": "1976-04-01T00:00:00.000Z",
+      "foundingDate": "1976-04-01",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -163,7 +163,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
     ```bash
     curl -X PUT http://localhost:4000/stocks/AAPL \
     -H "Content-Type: application/json" \
-    -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01T00:00:00.000Z"}'
+    -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01"}'
     ```
   - **Response**:
     ```json
@@ -171,7 +171,7 @@ This is a RESTful API to manage stocks, providing CRUD operations for stock data
       "_id": "uniqueStockId",
       "companyName": "Apple Inc.",
       "ticker": "AAPL",
-      "foundingDate": "1976-04-01T00:00:00.000Z",
+      "foundingDate": "1976-04-01",
       "createdAt": "timestamp",
       "updatedAt": "timestamp"
     }
@@ -250,7 +250,7 @@ To interact with the API, you can use the following cURL commands.
   ```bash
   curl -X POST http://localhost:4000/stocks \
   -H "Content-Type: application/json" \
-  -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04T00:00:00.000Z"}'
+  -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04"}'
   ```
 
 - **Get Stock by Ticker**:
@@ -264,7 +264,7 @@ To interact with the API, you can use the following cURL commands.
   ```bash
   curl -X PUT http://localhost:4000/stocks/AAPL \
   -H "Content-Type: application/json" \
-  -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01T00:00:00.000Z"}'
+  -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01"}'
   ```
 
 - **Delete Stock**:
