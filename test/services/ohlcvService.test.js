@@ -5,6 +5,8 @@ import {
   analyzeProfitPotential,
   calculateBestTradeAndMaxProfitForAPeriod,
   findDateRangeWithSameWorkingDays,
+  getTradingDaysInAPeriod,
+  findBetterPerformingStocks,
 } from "../../src/services/ohlcvService.js";
 import OhlcvData from "../../src/models/OhlcvData.js";
 
@@ -175,7 +177,7 @@ describe("Profit Analysis Tests", () => {
         sellPrice: 102,
         profit: 5,
       });
-      // Multiple trades: 98->101 (3) + 97->102 (5) = 8
+      //Multiple trades: 98->101(3) + 97->102(5) = 8
       expect(result.maxMultipleTradesProfit).to.equal(8);
     });
   });
@@ -522,7 +524,7 @@ describe("Profit Analysis Tests", () => {
             }
 
             if (query.date?.$gte && query.date?.$lte) {
-              // For periods that need date range
+              //For periods that need date range
               if (query.date.$gte >= new Date("2020-01-07")) {
                 return Promise.resolve(mockData.next);
               }
@@ -637,6 +639,135 @@ describe("Profit Analysis Tests", () => {
         { ticker: "GOOG", profit: 30 },
         { ticker: "MSFT", profit: 20 },
       ]);
+    });
+  });
+
+  describe("getTradingDaysInAPeriod", () => {
+    it("should return correct count from countDocuments", async () => {
+      const countStub = sandbox.stub(OhlcvData, "countDocuments").resolves(3);
+
+      const result = await getTradingDaysInAPeriod(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-03")
+      );
+
+      expect(result).to.equal(3);
+      expect(countStub.calledOnce).to.be.true;
+      expect(countStub.firstCall.args[0]).to.deep.equal({
+        ticker: "AAPL",
+        date: {
+          $gte: new Date("2020-01-01"),
+          $lte: new Date("2020-01-03"),
+        },
+      });
+    });
+
+    it("should handle empty results", async () => {
+      const countStub = sandbox.stub(OhlcvData, "countDocuments").resolves(0);
+
+      const result = await getTradingDaysInAPeriod(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-03")
+      );
+
+      expect(result).to.equal(0);
+    });
+  });
+
+  describe("findBetterPerformingStocks", () => {
+    it("should return empty array when no better performing stocks exist", async () => {
+      const distinctStub = sandbox
+        .stub(OhlcvData, "distinct")
+        .resolves(["MSFT", "GOOG"]);
+      const findStub = sandbox.stub(OhlcvData, "find").returns({
+        sort: () =>
+          Promise.resolve([
+            { date: new Date("2020-01-01"), close: 100 },
+            { date: new Date("2020-01-02"), close: 90 },
+          ]),
+      });
+
+      const result = await findBetterPerformingStocks(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-02"),
+        50
+      );
+
+      expect(result).to.deep.equal([]);
+      expect(distinctStub.calledOnceWith("ticker", { ticker: { $ne: "AAPL" } }))
+        .to.be.true;
+    });
+
+    it("should return sorted list of better performing stocks", async () => {
+      const distinctStub = sandbox
+        .stub(OhlcvData, "distinct")
+        .resolves(["MSFT", "GOOG", "META"]);
+
+      const findStub = sandbox.stub(OhlcvData, "find");
+      findStub.callsFake((query) => {
+        const mockData = {
+          MSFT: [
+            { date: new Date("2020-01-01"), close: 100 },
+            { date: new Date("2020-01-02"), close: 130 },
+          ],
+          GOOG: [
+            { date: new Date("2020-01-01"), close: 100 },
+            { date: new Date("2020-01-02"), close: 150 },
+          ],
+          META: [
+            { date: new Date("2020-01-01"), close: 100 },
+            { date: new Date("2020-01-02"), close: 110 },
+          ],
+        };
+
+        return {
+          sort: () => Promise.resolve(mockData[query.ticker]),
+        };
+      });
+
+      const result = await findBetterPerformingStocks(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-02"),
+        20 // original profit
+      );
+
+      expect(result).to.deep.equal([
+        { ticker: "GOOG", profit: 50 },
+        { ticker: "MSFT", profit: 30 },
+      ]);
+    });
+
+    it("should handle empty distinct tickers result", async () => {
+      sandbox.stub(OhlcvData, "distinct").resolves([]);
+
+      const result = await findBetterPerformingStocks(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-02"),
+        10
+      );
+
+      expect(result).to.deep.equal([]);
+    });
+
+    it("should handle null analysis results", async () => {
+      sandbox.stub(OhlcvData, "distinct").resolves(["MSFT"]);
+      sandbox.stub(OhlcvData, "find").returns({
+        sort: () => Promise.resolve([]), //    This will  cause calculateBestTradeAndMaxProfitForAPeriod to return null
+      });
+
+      const result = await findBetterPerformingStocks(
+        "AAPL",
+        new Date("2020-01-01"),
+        new Date("2020-01-02"),
+        10
+      );
+
+      expect(result).to.deep.equal([]);
     });
   });
 });
