@@ -5,6 +5,7 @@ import {
   getStockByTickerDto,
   createStockDto,
   updateStockDto,
+  getPaginatedStocksDto,
 } from "../validation/stockDtos.js";
 
 const router = express.Router();
@@ -19,6 +20,13 @@ router.get(
   validateDto(getStockByTickerDto, "params"),
   stockController.getStockByTicker
 );
+
+router.get(
+  "/stocks",
+  validateDto(getPaginatedStocksDto, "query"),
+  stockController.getPaginatedStocks
+);
+
 router.put(
   "/stocks/:ticker",
   validateDto(getStockByTickerDto, "params"),

@@ -58,3 +58,34 @@ export const deleteStock = async (ticker) => {
     throw error;
   }
 };
+
+export const getPaginatedStocks = async (
+  page = 1,
+  limit = 20,
+  sortBy = "ticker"
+) => {
+  try {
+    const skip = (page - 1) * limit;
+
+    const stocks = await Stock.find({})
+      .sort({ [sortBy]: 1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Stock.countDocuments({});
+
+    return {
+      stocks,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+        totalItems: total,
+        itemsPerPage: limit,
+        hasNextPage: skip + stocks.length < total,
+        hasPreviousPage: page > 1,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
+};
