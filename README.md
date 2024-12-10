@@ -13,14 +13,66 @@ npm run test
 
 or inside app docker container,
 
-# Stock CRUD api
+# Stock CRUD API
 
 This is a RESTful API to manage stocks, providing CRUD operations for stock data, such as creating, reading, updating, and deleting stock entries.
-And of README includes OHLCV data api.
 
 ## API Endpoints
 
-### 1. **Create a Stock**
+### 1. **Get Paginated Stocks**
+
+- **Endpoint**: `GET api/stocks`
+- **Description**: Retrieve a paginated list of stocks with sorting options.
+- **Query Parameters**:
+
+  - `page`: Page number (default: 1, min: 1)
+  - `limit`: Number of items per page (default: 20, min: 1, max: 100)
+  - `sortBy`: Field to sort by (options: "ticker", "companyName", "foundingDate", default: "ticker")
+
+- **Response**:
+
+  - **Status Code**: `200 OK`
+  - **Body**:
+    ```json
+    {
+      "stocks": [
+        {
+          "_id": "uniqueStockId",
+          "companyName": "Apple Inc.",
+          "ticker": "AAPL",
+          "foundingDate": "1976-04-01",
+          "createdAt": "timestamp",
+          "updatedAt": "timestamp"
+        }
+        // ... more stocks
+      ],
+      "pagination": {
+        "currentPage": 1,
+        "totalPages": 5,
+        "totalItems": 100,
+        "itemsPerPage": 20,
+        "hasNextPage": true,
+        "hasPreviousPage": false
+      }
+    }
+    ```
+
+- **Error Response**:
+
+  - **Status Code**: `400 Bad Request`
+  - **Body**:
+    ```json
+    {
+      "message": "Invalid pagination parameters. Page must be ≥ 1 and limit between 1 and 100"
+    }
+    ```
+
+- **Usage Example**:
+  ```bash
+  curl -X GET "http://localhost:4000/api/stocks?page=1&limit=20&sortBy=ticker"
+  ```
+
+### 2. **Create a Stock**
 
 - **Endpoint**: `POST api/stocks`
 - **Description**: Create a new stock entry.
@@ -60,27 +112,13 @@ And of README includes OHLCV data api.
     ```
 
 - **Usage Example**:
-  - **Request**:
-    ```bash
-    curl -X POST http://localhost:4000/api/stocks \
-    -H "Content-Type: application/json" \
-    -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04"}'
-    ```
-  - **Response**:
-    ```json
-    {
-      "_id": "uniqueStockId",
-      "companyName": "Facebook",
-      "ticker": "META",
-      "foundingDate": "2004-02-04",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
-    }
-    ```
+  ```bash
+  curl -X POST http://localhost:4000/api/stocks \
+  -H "Content-Type: application/json" \
+  -d '{"companyName": "Facebook", "ticker": "META", "foundingDate": "2004-02-04"}'
+  ```
 
----
-
-### 2. **Get Stock by Ticker**
+### 3. **Get Stock by Ticker**
 
 - **Endpoint**: `GET api/stocks/:ticker`
 - **Description**: Retrieve a stock entry by its ticker symbol.
@@ -114,25 +152,11 @@ And of README includes OHLCV data api.
     ```
 
 - **Usage Example**:
-  - **Request**:
-    ```bash
-    curl -X GET http://localhost:4000/api/stocks/AAPL
-    ```
-  - **Response**:
-    ```json
-    {
-      "_id": "uniqueStockId",
-      "companyName": "Apple",
-      "ticker": "AAPL",
-      "foundingDate": "1976-04-01",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
-    }
-    ```
+  ```bash
+  curl -X GET http://localhost:4000/api/stocks/AAPL
+  ```
 
----
-
-### 3. **Update Stock by Ticker**
+### 4. **Update Stock by Ticker**
 
 - **Endpoint**: `PUT api/stocks/:ticker`
 - **Description**: Update an existing stock entry by its ticker symbol.
@@ -175,27 +199,13 @@ And of README includes OHLCV data api.
     ```
 
 - **Usage Example**:
-  - **Request**:
-    ```bash
-    curl -X PUT http://localhost:4000/api/stocks/AAPL \
-    -H "Content-Type: application/json" \
-    -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01"}'
-    ```
-  - **Response**:
-    ```json
-    {
-      "_id": "uniqueStockId",
-      "companyName": "Apple Inc.",
-      "ticker": "AAPL",
-      "foundingDate": "1976-04-01",
-      "createdAt": "timestamp",
-      "updatedAt": "timestamp"
-    }
-    ```
+  ```bash
+  curl -X PUT http://localhost:4000/api/stocks/AAPL \
+  -H "Content-Type: application/json" \
+  -d '{"companyName": "Apple Inc.", "foundingDate": "1976-04-01"}'
+  ```
 
----
-
-### 4. **Delete Stock by Ticker**
+### 5. **Delete Stock by Ticker**
 
 - **Endpoint**: `DELETE api/stocks/:ticker`
 - **Description**: Delete a stock entry by its ticker symbol.
@@ -224,42 +234,43 @@ And of README includes OHLCV data api.
     ```
 
 - **Usage Example**:
-  - **Request**:
-    ```bash
-    curl -X DELETE http://localhost:4000/api/stocks/AAPL
-    ```
-  - **Response**:
-    ```json
-    {
-      "message": "Stock deleted successfully"
-    }
-    ```
-
----
+  ```bash
+  curl -X DELETE http://localhost:4000/api/stocks/AAPL
+  ```
 
 ## Validation Rules
 
 Each endpoint that requires data validation uses **Joi** for schema validation. Below are the validation rules for each DTO (Data Transfer Object):
 
+- **getPaginatedStocksDto**:
+
+  - `page`: Optional, integer, minimum 1, defaults to 1
+  - `limit`: Optional, integer, minimum 1, maximum 100, defaults to 20
+  - `sortBy`: Optional, string, must be one of ["ticker", "companyName", "foundingDate"], defaults to "ticker"
+
 - **createStockDto**:
 
-  - `companyName`: Required, string, no extra spaces.
-  - `ticker`: Required, unique, uppercase, string.
-  - `foundingDate`: Required, Date.
+  - `companyName`: Required, string, no extra spaces
+  - `ticker`: Required, unique, uppercase, string
+  - `foundingDate`: Required, Date
 
 - **getStockByTickerDto**:
 
-  - `ticker`: Required, string, uppercase.
+  - `ticker`: Required, string, uppercase
 
 - **updateStockDto**:
-  - `companyName`: Optional, string, no extra spaces.
-  - `foundingDate`: Optional, Date.
-
----
+  - `companyName`: Optional, string, no extra spaces
+  - `foundingDate`: Optional, Date
 
 ## Example Usage with cURL
 
 To interact with the API, you can use the following cURL commands.
+
+- **Get Paginated Stocks**:
+
+  ```bash
+  curl -X GET "http://localhost:4000/api/stocks?page=1&limit=20&sortBy=ticker"
+  ```
 
 - **Create Stock**:
 
@@ -287,8 +298,6 @@ To interact with the API, you can use the following cURL commands.
   ```bash
   curl -X DELETE http://localhost:4000/api/stocks/AAPL
   ```
-
----
 
 ## Error Handling
 
